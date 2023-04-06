@@ -25,7 +25,11 @@ export class LoginChecker {
     await expect(modal).toBeHidden();
   }
 
-  async isChecked(locator: Locator) {
+  async checkIsChecked(locator: Locator) {
     await expect(locator).toBeChecked();
+  }
+
+  async checkIsNotChecked(locator: Locator) {
+    expect(await locator.isChecked()).toBeFalsy();
   }
 }

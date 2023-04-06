@@ -14,6 +14,8 @@ export class LoginLocator {
   modalOkayButton: Locator;
   modalCancelButton: Locator;
 
+  blinkingText: Locator;
+
   constructor(page: Page) {
     this.page = page;
     this.userName = page.getByLabel("Username:");
@@ -27,5 +29,7 @@ export class LoginLocator {
     this.warningModal = page.locator(".modal-content");
     this.modalOkayButton = page.locator("#okayBtn");
     this.modalCancelButton = page.locator("#cancelBtn");
+
+    this.blinkingText = page.locator(".blinkingText");
   }
 }

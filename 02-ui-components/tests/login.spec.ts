@@ -20,6 +20,7 @@ test.describe("Login page tests", () => {
     await login.checker.checkLoginRedirection();
   });
 
+  //! << Modal tests >>
   test.describe("Verify modal behaviour", () => {
     test.beforeEach(async ({ page }) => {
       const login = new LoginPage(page);
@@ -42,7 +43,7 @@ test.describe("Login page tests", () => {
     }) => {
       const login = new LoginPage(page);
       await login.clickOn(login.locator.modalCancelButton);
-      await login.checker.isChecked(login.locator.adminRadioButton);
+      await login.checker.checkIsChecked(login.locator.adminRadioButton);
     });
 
     test("Clicking on 'Okay' button closes the modal", async ({ page }) => {
@@ -54,10 +55,11 @@ test.describe("Login page tests", () => {
     test("Clicking on 'Okay' button changes selection", async ({ page }) => {
       const login = new LoginPage(page);
       await login.clickOn(login.locator.modalOkayButton);
-      await login.checker.isChecked(login.locator.userRadioButton);
+      await login.checker.checkIsChecked(login.locator.userRadioButton);
     });
   });
 
+  //! << Radio button tests >>
   test.describe("Verify radio button selection", () => {
     test.beforeEach(async ({ page }) => {
       const login = new LoginPage(page);
@@ -67,13 +69,20 @@ test.describe("Login page tests", () => {
 
     test("'User' radio button is selected when clicked", async ({ page }) => {
       const login = new LoginPage(page);
-      await expect(login.locator.userRadioButton).toBeChecked();
+      await login.checker.checkIsChecked(login.locator.userRadioButton);
+      await login.checker.checkIsNotChecked(login.locator.adminRadioButton);
     });
 
     test("'Admin' radio button is selected when clicked", async ({ page }) => {
       const login = new LoginPage(page);
       await login.clickOn(login.locator.adminRadioButton);
-      await expect(login.locator.adminRadioButton).toBeChecked();
+      await login.checker.checkIsChecked(login.locator.adminRadioButton);
+      await login.checker.checkIsNotChecked(login.locator.userRadioButton);
     });
+  });
+
+  test("Verify blinking text has blinking property", async ({ page }) => {
+    const login = new LoginPage(page);
+    await expect(login.locator.blinkingText).toHaveClass("blinkingText");
   });
 });
