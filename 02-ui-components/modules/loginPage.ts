@@ -1,0 +1,48 @@
+import { Page, Locator } from "@playwright/test";
+import { LoginChecker } from "./loginChecker";
+import { LoginLocator } from "./loginLocator";
+
+export class LoginPage {
+  page: Page;
+  checker: LoginChecker;
+  locator: LoginLocator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.checker = new LoginChecker(page);
+    this.locator = new LoginLocator(page);
+  }
+
+  async goto() {
+    await this.page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  }
+
+  async fillForm(
+    username: string,
+    password: string,
+    userType: string,
+    role: string,
+    agreeTerms: boolean
+  ) {
+    await this.fillInput(this.locator.userName, username);
+    await this.fillInput(this.locator.password, password);
+    if (userType.toLowerCase() === "admin")
+      await this.clickOn(this.locator.radioButtons.first());
+    else if (userType.toLowerCase() === "user")
+      await this.clickOn(this.locator.radioButtons.last());
+    await this.selectDropOption(this.locator.roleDropdown, role);
+    if (agreeTerms) this.clickOn(this.locator.termsCheckbox);
+  }
+
+  async fillInput(locator: Locator, input: string) {
+    await locator.fill(input);
+  }
+
+  async clickOn(locator: Locator) {
+    await locator.click();
+  }
+
+  async selectDropOption(locator: Locator, value: string) {
+    await locator.selectOption(value);
+  }
+}
