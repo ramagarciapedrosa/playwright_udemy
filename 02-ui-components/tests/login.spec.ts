@@ -1,13 +1,13 @@
 import { test, expect, Locator } from "@playwright/test";
 import { LoginPage } from "../modules/loginPage";
 
-test.describe("login", () => {
+test.describe("Login page tests", () => {
   test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
   });
 
-  test.only("successful login", async ({ page }) => {
+  test("Successful login", async ({ page }) => {
     const login = new LoginPage(page);
     await login.fillForm(
       "rahulshettyacademy",
@@ -20,9 +20,60 @@ test.describe("login", () => {
     await login.checker.checkLoginRedirection();
   });
 
-  test("Clicking on 'Admin' radio button triggers modal", async ({ page }) => {
-    const login = new LoginPage(page);
-    await login.clickOn(login.locator.userRadioButton);
-    await login.checker.checkModalDisplay(login.locator.warningModal);
+  test.describe("Verify modal behaviour", () => {
+    test.beforeEach(async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.userRadioButton);
+    });
+
+    test("Clicking on 'User' radio button triggers modal", async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.checker.checkModalIsDisplayed(login.locator.warningModal);
+    });
+
+    test("Clicking on 'Cancel' button closes the modal", async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.modalCancelButton);
+      await login.checker.checkModalIsHidden(login.locator.warningModal);
+    });
+
+    test("Clicking on 'Cancel' button doesn't change selection", async ({
+      page,
+    }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.modalCancelButton);
+      await login.checker.isChecked(login.locator.adminRadioButton);
+    });
+
+    test("Clicking on 'Okay' button closes the modal", async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.modalOkayButton);
+      await login.checker.checkModalIsHidden(login.locator.warningModal);
+    });
+
+    test("Clicking on 'Okay' button changes selection", async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.modalOkayButton);
+      await login.checker.isChecked(login.locator.userRadioButton);
+    });
+  });
+
+  test.describe("Verify radio button selection", () => {
+    test.beforeEach(async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.userRadioButton);
+      await login.clickOn(login.locator.modalOkayButton);
+    });
+
+    test("'User' radio button is selected when clicked", async ({ page }) => {
+      const login = new LoginPage(page);
+      await expect(login.locator.userRadioButton).toBeChecked();
+    });
+
+    test("'Admin' radio button is selected when clicked", async ({ page }) => {
+      const login = new LoginPage(page);
+      await login.clickOn(login.locator.adminRadioButton);
+      await expect(login.locator.adminRadioButton).toBeChecked();
+    });
   });
 });

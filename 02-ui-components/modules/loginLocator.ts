@@ -11,7 +11,7 @@ export class LoginLocator {
   signInButton: Locator;
 
   warningModal: Locator;
-  modalConfirmButton: Locator;
+  modalOkayButton: Locator;
   modalCancelButton: Locator;
 
   constructor(page: Page) {
@@ -25,7 +25,7 @@ export class LoginLocator {
     this.signInButton = page.locator("#signInBtn");
 
     this.warningModal = page.locator(".modal-content");
-    this.modalConfirmButton = page.locator("#okayBtn");
+    this.modalOkayButton = page.locator("#okayBtn");
     this.modalCancelButton = page.locator("#cancelBtn");
   }
 }

@@ -17,7 +17,15 @@ export class LoginChecker {
     await expect(this.page).toHaveURL(url);
   }
 
-  async checkModalDisplay(modal: Locator) {
+  async checkModalIsDisplayed(modal: Locator) {
     await expect(modal).toBeVisible();
+  }
+
+  async checkModalIsHidden(modal: Locator) {
+    await expect(modal).toBeHidden();
+  }
+
+  async isChecked(locator: Locator) {
+    await expect(locator).toBeChecked();
   }
 }

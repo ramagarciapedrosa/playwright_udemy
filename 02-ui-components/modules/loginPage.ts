@@ -30,10 +30,9 @@ export class LoginPage {
       await this.clickOn(this.locator.adminRadioButton);
     else if (userType.toLowerCase() === "user") {
       await this.clickOn(this.locator.userRadioButton);
-      await this.clickOn(this.locator.modalConfirmButton);
+      await this.clickOn(this.locator.modalOkayButton);
     }
-    const capitalizedRole: string =
-      role[0].toUpperCase() + role.slice(1).toLowerCase();
+    const capitalizedRole = role[0].toUpperCase() + role.slice(1).toLowerCase();
     await this.selectDropOption(this.locator.roleDropdown, capitalizedRole);
     if (agreeTerms) this.clickOn(this.locator.termsCheckbox);
   }
