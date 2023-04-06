@@ -13,7 +13,7 @@ test.describe("login", () => {
       "rahulshettyacademy",
       "learning",
       "user",
-      "teacher",
+      "TEACHER",
       true
     );
     await login.clickOn(login.locator.signInButton);
