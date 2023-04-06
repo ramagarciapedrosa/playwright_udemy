@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test"
+    "all": "npx playwright test",
+    "modal": "npx playwright test --grep @modal",
+    "radio-buttons": "npx playwright test --grep @radio-buttons"
   },
   "keywords": [],
   "author": "",

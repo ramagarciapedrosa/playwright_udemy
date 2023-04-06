@@ -34,7 +34,7 @@ export class LoginPage {
     }
     const capitalizedRole = role[0].toUpperCase() + role.slice(1).toLowerCase();
     await this.selectDropOption(this.locator.roleDropdown, capitalizedRole);
-    if (agreeTerms) this.clickOn(this.locator.termsCheckbox);
+    if (agreeTerms) await this.checkOn(this.locator.termsCheckbox);
   }
 
   async fillInput(locator: Locator, input: string) {
@@ -43,6 +43,10 @@ export class LoginPage {
 
   async clickOn(locator: Locator) {
     await locator.click();
+  }
+
+  async checkOn(locator: Locator) {
+    await locator.check();
   }
 
   async selectDropOption(locator: Locator, value: string) {

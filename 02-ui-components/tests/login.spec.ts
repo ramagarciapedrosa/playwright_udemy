@@ -1,4 +1,4 @@
-import { test, expect, Locator } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { LoginPage } from "../modules/loginPage";
 
 test.describe("Login page tests", () => {
@@ -7,7 +7,8 @@ test.describe("Login page tests", () => {
     await loginPage.goto();
   });
 
-  test("Successful login", async ({ page }) => {
+  //! << Happy path login>>
+  test.only("Successful login", async ({ page }) => {
     const login = new LoginPage(page);
     await login.fillForm(
       "rahulshettyacademy",
@@ -21,7 +22,7 @@ test.describe("Login page tests", () => {
   });
 
   //! << Modal tests >>
-  test.describe("Verify modal behaviour", () => {
+  test.describe("Verify modal behaviour @modal", () => {
     test.beforeEach(async ({ page }) => {
       const login = new LoginPage(page);
       await login.clickOn(login.locator.userRadioButton);
@@ -60,7 +61,7 @@ test.describe("Login page tests", () => {
   });
 
   //! << Radio button tests >>
-  test.describe("Verify radio button selection", () => {
+  test.describe("Verify radio button selection @radio-buttons", () => {
     test.beforeEach(async ({ page }) => {
       const login = new LoginPage(page);
       await login.clickOn(login.locator.userRadioButton);
@@ -81,8 +82,30 @@ test.describe("Login page tests", () => {
     });
   });
 
-  test("Verify blinking text has blinking property", async ({ page }) => {
+  //! << Free-Access link tests >>
+  test("Verify 'Free access' link is blinking", async ({ page }) => {
     const login = new LoginPage(page);
-    await expect(login.locator.blinkingText).toHaveClass("blinkingText");
+    login.goto();
+    await expect(login.locator.freeAccessLink).toHaveClass("blinkingText");
+  });
+});
+
+//! << Academy Page tests >>
+// Out of the actual 'login' suite because it needs a different context
+test.describe("'Free access' link tests", () => {
+  test("Verify 'Free access' link redirection", async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const login = new LoginPage(page);
+    login.goto();
+
+    const [, newPage] = await Promise.all([
+      login.clickOn(login.locator.freeAccessLink),
+      context.waitForEvent("page"),
+    ]);
+
+    await expect(newPage).toHaveURL(
+      "https://rahulshettyacademy.com/documents-request"
+    );
   });
 });

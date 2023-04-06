@@ -14,7 +14,7 @@ export class LoginLocator {
   modalOkayButton: Locator;
   modalCancelButton: Locator;
 
-  blinkingText: Locator;
+  freeAccessLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -30,6 +30,6 @@ export class LoginLocator {
     this.modalOkayButton = page.locator("#okayBtn");
     this.modalCancelButton = page.locator("#cancelBtn");
 
-    this.blinkingText = page.locator(".blinkingText");
+    this.freeAccessLink = page.locator("[href*='documents-request']");
   }
 }
