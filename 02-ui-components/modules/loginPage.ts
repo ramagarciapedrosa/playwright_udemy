@@ -33,8 +33,7 @@ export class LoginPage {
       await this.clickOn(this.locator.modalConfirmButton);
     }
     const capitalizedRole: string = role[0].toUpperCase() + role.slice(1);
-    console.log(capitalizedRole);
-    await this.selectDropOption(this.locator.roleDropdown, role);
+    await this.selectDropOption(this.locator.roleDropdown, capitalizedRole);
     if (agreeTerms) this.clickOn(this.locator.termsCheckbox);
   }
 
