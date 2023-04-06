@@ -7,14 +7,13 @@ test.describe("login", () => {
     await loginPage.goto();
   });
 
-  test("successful login", async ({ page }) => {
+  test.only("successful login", async ({ page }) => {
     const login = new LoginPage(page);
-    await page.pause();
     await login.fillForm(
       "rahulshettyacademy",
       "learning",
-      "Admin",
-      "Teacher",
+      "user",
+      "teacher",
       true
     );
     await login.clickOn(login.locator.signInButton);

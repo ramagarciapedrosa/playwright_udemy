@@ -27,9 +27,13 @@ export class LoginPage {
     await this.fillInput(this.locator.userName, username);
     await this.fillInput(this.locator.password, password);
     if (userType.toLowerCase() === "admin")
-      await this.clickOn(this.locator.radioButtons.first());
-    else if (userType.toLowerCase() === "user")
-      await this.clickOn(this.locator.radioButtons.last());
+      await this.clickOn(this.locator.adminRadioButton);
+    else if (userType.toLowerCase() === "user") {
+      await this.clickOn(this.locator.userRadioButton);
+      await this.clickOn(this.locator.modalConfirmButton);
+    }
+    const capitalizedRole: string = role[0].toUpperCase() + role.slice(1);
+    console.log(capitalizedRole);
     await this.selectDropOption(this.locator.roleDropdown, role);
     if (agreeTerms) this.clickOn(this.locator.termsCheckbox);
   }
