@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "all": "npx playwright test",
+    "debug-all": "npx playwright test --debug",
     "modal": "npx playwright test --grep @modal",
     "radio-buttons": "npx playwright test --grep @radio-buttons"
   },
