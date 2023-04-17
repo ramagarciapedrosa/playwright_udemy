@@ -27,7 +27,7 @@ export class CheckoutPage {
     }
   }
 
-  async navigateToOrders() {
+  async nagigateToOrders() {
     await this.page.goto("https://rahulshettyacademy.com/client/dashboard/myorders");
   }
 

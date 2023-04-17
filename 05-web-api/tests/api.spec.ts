@@ -1,54 +1,31 @@
-import { test, request, expect } from "@playwright/test";
+import { test, request } from "@playwright/test";
 import { DashboardPage } from "../modules/DashboardPage";
-import { CheckoutPage } from "../modules/CheckoutPage";
+import { APIUtils } from "../utils/APIUtils";
+import { loginRequestPayload, orderRequestPayload } from "../utils/Payloads";
 
-let loginToken: string;
-let orderIds: string[];
+interface Response {
+  [key: string]: string;
+}
+
+const response: Response = {};
 
 test.beforeAll(async () => {
-  // Login API
-  const loginRequestPayload = {
-    userEmail: "rgarcia@makingsense.com",
-    userPassword: "Qwerty123",
-  };
   const apiContext = await request.newContext();
-  const loginResponse = await apiContext.post(
-    "https://rahulshettyacademy.com/api/ecom/auth/login",
-    { data: loginRequestPayload }
-  );
-  expect(loginResponse.ok()).toBeTruthy(); // Expect any 2** status code
-  const loginResponseJson = await loginResponse.json();
-  loginToken = loginResponseJson.token;
 
-  // Create order API
-  const orderRequestPayload = {
-    orders: [
-      {
-        country: "Argentina",
-        productOrderedId: "6262e95ae26b7e1a10e89bf0",
-      },
-    ],
-  };
-  const orderResponse = await apiContext.post(
-    "https://rahulshettyacademy.com/api/ecom/order/create-order",
-    {
-      data: orderRequestPayload,
-      headers: {
-        Authorization: loginToken,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  expect(orderResponse.ok()).toBeTruthy();
-  const orderResponseJson = await orderResponse.json();
-  orderIds = orderResponseJson.orders;
+  //! Login API
+  const apiUtils = new APIUtils(apiContext, loginRequestPayload);
+  response.token = await apiUtils.getToken();
+
+  //! Create Order API
+  const orderResponse = await apiUtils.createOrder(orderRequestPayload, response.token);
+  response.orders = orderResponse.orders;
 });
 
 test("Buy an item flow", async ({ page }) => {
   // Add token to Local Storage
   await page.addInitScript((e: string) => {
     window.localStorage.setItem("token", e);
-  }, loginToken);
+  }, response.token);
 
   // Navigate directly to Dashboard > Checkout section
   const dashboardPage = new DashboardPage(page);
@@ -56,6 +33,6 @@ test("Buy an item flow", async ({ page }) => {
   const checkoutPage = await dashboardPage.navigateToOrders();
 
   // Check if new order is in the orders list
-  const [orderId] = orderIds;
+  const [orderId] = response.orders;
   await checkoutPage.check.itemIsInOrders(orderId);
 });
